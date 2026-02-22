@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Phone History</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+body {
+    font-family: Arial;
+    background: #f4f6f9;
+    padding: 20px;
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.left {
+    width: 55%;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.right {
+    width: 40%;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+}
+</style>
+</head>
+<body>
+
+<h1>📊 Phone Saving History</h1>
+
+<div class="container">
+
+<div class="left">
+<h3>Full History</h3>
+<table border="1" width="100%">
+<tr>
+<th>Date</th>
+<th>Saving</th>
+<th>Expense</th>
+<th>Note</th>
+<th>Action</th>
+</tr>
+
+{% for r in records %}
+<tr 
+{% if r[2] > r[3] %}
+style="background:#e8f5e9;"
+{% elif r[3] > r[2] %}
+style="background:#ffebee;"
+{% endif %}
+>
+
+<td>{{ r[1] }}</td>
+<td>{{ r[2] }}</td>
+<td>{{ r[3] }}</td>
+<td>{{ r[4] }}</td>
+<td>
+    <a href="/edit-phone-entry/{{ r[0] }}">✏ Edit</a> |
+    <a href="/delete-phone-entry/{{ r[0] }}" 
+       onclick="return confirm('Are you sure?')">🗑 Delete</a>
+</td>
+</tr>
+{% endfor %}
+</table>
+</div>
+
+<div class="right">
+<h3>Graph</h3>
+<canvas id="myChart"></canvas>
+<hr>
+<h4>Total Saving: ₹{{ total_saving }}</h4>
+<h4>Total Expense: ₹{{ total_expense }}</h4>
+<h4>Net Saved: ₹{{ total_saving - total_expense }}</h4>
+
+<br>
+<a href="/phone-khata">
+<button>⬅ Back to Dashboard</button>
+</a>
+
+</div>
+
+</div>
+
+<script>
+var ctx = document.getElementById('myChart').getContext('2d');
+new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: {{ dates|tojson }},
+        datasets: [{
+            label: 'Savings',
+            data: {{ savings|tojson }},
+            borderColor: 'green',
+            fill: false
+        },{
+            label: 'Expenses',
+            data: {{ expenses|tojson }},
+            borderColor: 'red',
+            fill: false
+        }]
+    }
+});
+</script>
+
+</body>
+</html>

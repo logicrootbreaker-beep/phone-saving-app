@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Past Months</title>
+</head>
+<body>
+  <h1>Past Months</h1>
+  <ul>
+    {% for m in months %}
+      <li><a href="/history?month={{ m[0] }}">{{ m[0] }}</a></li>
+    {% else %}
+      <li>No past months found.</li>
+    {% endfor %}
+  </ul>
+  <a href="/history">Back to History</a>
+</body>
+</html>

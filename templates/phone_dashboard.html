@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<head>
+    <title>Phone Dashboard</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        .dark {
+            background: #121212;
+            color: white;
+        }
+
+        .dark .left,
+        .dark .right {
+            background: #1e1e1e;
+            color: white;
+        }
+    </style>
+</head>
+<style>
+
+body {
+    font-family: Arial;
+    background: #f4f6f9;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.left, .right {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.left {
+    width: 55%;
+}
+
+.right {
+    width: 35%;
+    text-align: center;
+}
+
+.progress-bar {
+    background: #ddd;
+    border-radius: 20px;
+    overflow: hidden;
+    margin: 20px 0;
+}
+
+.progress-fill {
+    height: 20px;
+    background: linear-gradient(to right, #00c853, #64dd17);
+    width: {{ percentage }}%;
+}
+
+button {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    background: #1976d2;
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #0d47a1;
+}
+</style>
+</head>
+
+<body id="body">
+
+<style>
+.dark {
+    background: #121212;
+    color: white;
+}
+
+.dark .left, 
+.dark .right {
+    background: #1e1e1e;
+    color: white;
+}
+</style>
+
+<script>
+function toggleDark() {
+    document.getElementById("body").classList.toggle("dark");
+}
+</script>
+
+
+<h1>📱 Phone Goal Dashboard</h1>
+<button onclick="toggleDark()">🌙 Toggle Dark Mode</button>
+
+
+<div class="container">
+
+<div class="left">
+<h3>Add Entry</h3>
+<form method="POST">
+    Date:<br>
+    <input type="date" name="date" required><br><br>
+
+    Saving:<br>
+    <input type="number" name="saving" step="0.01"><br><br>
+
+    Expense:<br>
+    <input type="number" name="expense" step="0.01"><br><br>
+
+    Note:<br>
+    <input type="text" name="note"><br><br>
+
+    <button type="submit">Add Entry</button>
+</form>
+
+<hr>
+
+<h3>Recent Entries</h3>
+<table width="100%" border="0">
+{% for r in recent_records %}
+<tr>
+<td>{{ r[1] }}</td>
+<td>+{{ r[2] }}</td>
+<td>-{{ r[3] }}</td>
+<td>{{ r[4] }}</td>
+</tr>
+{% endfor %}
+</table>
+
+<br>
+<a href="/phone-khata-history">
+<button>View Full History & Graph</button>
+</a>
+
+</div>
+
+<div class="right">
+<h2>Goal: ₹{{ goal }}</h2>
+<h3>Saved: ₹{{ progress }}</h3>
+<h4>Remaining: ₹{{ remaining }}</h4>
+
+<div class="progress-bar">
+    <div class="progress-fill" id="progressFill"></div>
+</div>
+
+<h3 id="percentText">0%</h3>
+
+
+<p>{{ percentage|round(2) }}% Completed</p>
+
+{% if percentage >= 100 %}
+<h3>🎉 Goal Achieved!</h3>
+{% endif %}
+{% if milestone %}
+<div style="background:#e8f5e9;padding:10px;border-radius:8px;">
+    <strong>{{ milestone }}</strong>
+</div>
+{% endif %}
+
+<h3>Achievements</h3>
+
+{% for badge in badges %}
+<div style="background:#fff3cd;padding:8px;margin:5px 0;border-radius:6px;">
+    {{ badge }}
+</div>
+{% endfor %}
+
+
+</div>
+
+</div>
+<script>
+let percent = {{ percentage|round(2) }};
+let fill = document.getElementById("progressFill");
+let text = document.getElementById("percentText");
+
+let width = 0;
+
+let interval = setInterval(() => {
+    if (width >= percent) {
+        clearInterval(interval);
+    } else {
+        width += 1;
+        fill.style.width = width + "%";
+        text.innerText = width + "% Completed";
+    }
+}, 15);
+</script>
+<script>
+function toggleDark() {
+    document.getElementById("body").classList.toggle("dark");
+}
+</script>
+
+{% if percentage >= 100 %}
+<script>
+confetti({
+    particleCount: 200,
+    spread: 120,
+    origin: { y: 0.6 }
+});
+</script>
+{% endif %}
+
+
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Khata - History</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1>📅 History</h1>
+    <a href="/past-months">
+  <button>View Past Months</button>
+</a>
+
+
+
+    <div style="display: flex;">
+        <!-- Left: Table -->
+        <div style="flex: 1; padding: 20px;">
+            <table border="1" cellpadding="5">
+                <tr>
+                    <th>ID</th>
+                    <th>Date</th>
+                    <th>Day</th>
+                    <th>Saving</th>
+                    <th>Expense</th>
+                    <th>Action</th>
+                </tr>
+                {% for record in records %}
+                <tr>
+                    <td>{{ record[0] }}</td>
+                    <td>{{ record[1] }}</td>
+                    <td>{{ record[2] }}</td>
+                    <td>{{ record[3] }}</td>
+                    <td>{{ record[4] }}</td>
+                    <td>
+                        <a href="/edit/{{ record[0] }}">✏️ Edit</a> |
+                        <a href="/delete/{{ record[0] }}">❌ Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+
+             
+        </div>
+
+        <!-- Right: Chart -->
+        <div style="flex: 1.5; padding: 10px ; margin-top: -100px;">
+            <h2>📊 Daily Savings & Expenses</h2>
+            <canvas id="myChart" width="400" height="200"></canvas>
+            <h2><strong>Total Savings:</strong> <span style="color: green;">₹{{ Total_savings }}</span></h2>
+            <h2><strong>Total Expense:</strong> <span style="color: red;">₹{{ Total_expense }}</span></h2>
+	    <br><a href="/">⬅️ Back to Dashboard 📝</a>
+            
+
+        </div>
+    </div>
+
+    <script>
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const myChart = new Chart(ctx, {
+            type: 'line',   
+            data: {
+                labels: {{ dates | tojson }},
+                datasets: [
+                    {
+                        label: 'Savings',
+                        data: {{ savings | tojson }},
+                        borderColor: 'green',
+                        backgroundColor: 'rgba(0, 255, 0, 0.1)',
+                        fill: false
+                    },
+                    {
+                        label: 'Expenses',
+                        data: {{ expenses | tojson }},
+                        borderColor: 'red',
+                        backgroundColor: 'rgba(255, 0, 0, 0.1)',
+                        fill: false
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+		
+    </script>
+
+	
+</body>
+</html>

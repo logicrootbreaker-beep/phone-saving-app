@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Person Ledger - {{ name }}</title>
+</head>
+<body>
+    <h1>💼 Ledger for {{ name }}</h1>
+
+    <h3>Add Transaction</h3>
+    <form action="/add_transaction/{{ person_id }}" method="POST">
+    Date: <input type="date" name="date" required><br><br>
+    Given: <input type="number" step="0.01" name="given"><br><br>
+    Received: <input type="number" step="0.01" name="received"><br><br>
+    Note: <input type="text" name="note"><br><br>
+    <button type="submit">Add</button>
+    </form>
+    <br><a href="/">⬅️ Back to Dashboard</a>
+
+    <h3>Transactions</h3>
+    <table border="1">
+        <tr>
+            <th>Date</th>
+    	    <th>Given</th>
+            <th>Received</th>
+            <th>Note</th>
+	    <th>Action</th>
+        </tr>
+        {% for t in transactions %}
+        <tr>
+            <td>{{ t[1] }}</td>
+            <td>₹{{ t[2] }}</td>
+            <td>₹{{ t[3] }}</td>
+            <td>{{ t[4] }}</td>
+            <td>
+                <a href="/delete_transaction/{{ t[0] }}/{{ person_id }}"
+                   click="return confirm('Delete this transaction?');">
+                   🗑️ Delete
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+     
+</body>
+</html>

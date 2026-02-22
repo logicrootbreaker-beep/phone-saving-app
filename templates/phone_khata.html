@@ -1,0 +1,66 @@
+<h1>📱 Phone Saving Goal: 30,000</h1>
+
+<h3>Progress: {{ progress }} / {{ goal }}</h3>
+<div style="background:#ddd; width:300px;">
+  <div style="background:green; width:{{ percentage }}%; height:20px;"></div>
+</div>
+<p>{{ percentage|round(2) }}% completed</p>
+
+<hr>
+
+<h3>Add Entry</h3>
+<form method="POST">
+    Date: <input type="date" name="date" required><br>
+    Saving: <input type="number" step="0.01" name="saving"><br>
+    Expense: <input type="number" step="0.01" name="expense"><br>
+    Note: <input type="text" name="note"><br>
+    <button type="submit">Add</button>
+</form>
+
+<hr>
+
+<h3>History</h3>
+<table border="1">
+<tr>
+  <th>Date</th>
+  <th>Saving</th>
+  <th>Expense</th>
+  <th>Note</th>
+</tr>
+
+{% for r in records %}
+<tr>
+  <td>{{ r[1] }}</td>
+  <td>{{ r[2] }}</td>
+  <td>{{ r[3] }}</td>
+  <td>{{ r[4] }}</td>
+</tr>
+{% endfor %}
+</table>
+
+<hr>
+
+<h3>Graph</h3>
+<canvas id="myChart"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+var ctx = document.getElementById('myChart').getContext('2d');
+var chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: {{ dates|tojson }},
+        datasets: [{
+            label: 'Savings',
+            data: {{ savings|tojson }},
+            borderColor: 'green',
+            fill: false
+        },{
+            label: 'Expenses',
+            data: {{ expenses|tojson }},
+            borderColor: 'red',
+            fill: false
+        }]
+    }
+});
+</script>

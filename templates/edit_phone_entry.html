@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Edit Entry</title>
+</head>
+<body>
+
+<h2>Edit Entry</h2>
+
+<form method="POST">
+Date:<br>
+<input type="date" name="date" value="{{ record[1] }}"><br><br>
+
+Saving:<br>
+<input type="number" step="0.01" name="saving" value="{{ record[2] }}"><br><br>
+
+Expense:<br>
+<input type="number" step="0.01" name="expense" value="{{ record[3] }}"><br><br>
+
+Note:<br>
+<input type="text" name="note" value="{{ record[4] }}"><br><br>
+
+<button type="submit">Update</button>
+</form>
+
+<br>
+<a href="/phone-khata-history">⬅ Cancel</a>
+
+</body>
+</html>
