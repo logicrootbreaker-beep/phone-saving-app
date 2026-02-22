@@ -1,3 +1,7 @@
 Flask
+Flask-Login
 mysql-connector-python
 gunicorn
+werkzeug
+email-validator
+flask-wtf
